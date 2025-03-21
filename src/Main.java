@@ -1,58 +1,78 @@
 public class Main {
-    static final int MAX = 4; // Número máximo de elementos na fila
-
-    // Cria uma fila vazia
-    static int comeco = 0; // Início da fila
-    static int tamanho = 0; // Tamanho da fila (número de elementos)
-    static int queue[] = new int[MAX]; // Vetor da fila
+    static final int TAMANHO = 5;
 
     public static void main(String[] args) {
-        inserir(1);
-        inserir(10);
-        inserir(100);
-        inserir(1000);
+        Fila minhaFila = new Fila();
+        criaFila(minhaFila);
 
-        System.out.println("");
+        enQueue(minhaFila, 1);
+        System.out.println("Valor 1 adicionado à fila!\n");
+        enQueue(minhaFila, 2);
+        System.out.println("Valor 2 adicionado à fila!\n");
+        enQueue(minhaFila, 3);
+        System.out.println("Valor 3 adicionado à fila!\n");
+        enQueue(minhaFila, 4);
+        System.out.println("Valor 4 adicionado à fila!\n");
+        enQueue(minhaFila, 5);
+        System.out.println("Valor 5 adicionado à fila!\n\n");
 
-        remover();
-        inserir(6);
-        remover();
-        inserir(60);
-        remover();
-        inserir(80);
+        System.out.println("Tentativa de adicionar o valor 6 à fila!\n");
+        enQueue(minhaFila, 6); // erro fila cheia
 
-        System.out.println("");
+        System.out.println("Valor " + deQueue(minhaFila) + " removido da fila!\n");
+        System.out.println("Valor " + deQueue(minhaFila) + " removido da fila!\n\n");
 
-        // Mostra fila na tela
-        for (int i = 0; i < MAX; i++) {
-            System.out.println("fila[" + i + "] = " + queue[i]);
+        enQueue(minhaFila, 7);
+        System.out.println("Valor 7 adicionado à fila!\n");
+        enQueue(minhaFila, 8);
+        System.out.println("Valor 8 adicionado à fila!\n\n");
+
+        System.out.println("Valor " + deQueue(minhaFila) + " removido da fila!\n");
+        System.out.println("Valor " + deQueue(minhaFila) + " removido da fila!\n");
+        System.out.println("Valor " + deQueue(minhaFila) + " removido da fila!\n");
+        System.out.println("Valor " + deQueue(minhaFila) + " removido da fila!\n");
+        System.out.println("Valor " + deQueue(minhaFila) + " removido da fila!\n\n");
+
+        System.out.println("Tentativa de remover valor da fila!");
+        System.out.println(deQueue(minhaFila)); // erro fila vazia
+    }
+
+    static void enQueue(Fila f, int dado) {
+        if ((f.inicio == f.fim + 1) || (f.inicio == 0 && f.fim == TAMANHO - 1)) {
+            System.out.println("\nErro: fila cheia\n\n\n");
+        } else {
+            if (f.inicio == -1) f.inicio = 0;
+            f.fim = (f.fim + 1) % TAMANHO;
+            f.dados[f.fim] = dado;
         }
     }
 
-    static void inserir(int elemento) {
-        // Checa se a fila está cheia
-        if (tamanho == MAX) {
-            System.out.println("\nfila cheia\n");
-        } else {
-            // Para tornar a fila circular
-            queue[(comeco + tamanho) % MAX] = elemento;
-            System.out.println("Valor " + elemento + " inserido no índice " + ((comeco + tamanho) % MAX) + " da fila");
-
-            // Incrementa tamanho da fila (elemento foi inserido)
-            tamanho++;
-        }
+    static void criaFila(Fila f) {
+        f.inicio = -1;
+        f.fim = -1;
     }
 
-    static void remover() {
-        // Checa se a fila está vazia
-        if (tamanho == 0) {
-            System.out.println("\nfila vazia\n");
+    static int deQueue(Fila f) {
+        int dado;
+        if (f.inicio == -1) {
+            System.out.println("\nErro: fila vazia\n\n");
+            return 0;
         } else {
-            // Apaga o primeiro elemento da fila deslocando o ponteiro do começo para o próximo elemento
-            comeco = (comeco + 1) % MAX;
-
-            // Decrementa o contador de tamanho (um valor foi removido)
-            tamanho--;
+            dado = f.dados[f.inicio];
+            if (f.inicio == f.fim) {
+                f.inicio = f.fim = -1;
+            } else {
+                f.inicio = (f.inicio + 1) % TAMANHO;
+            }
         }
+        return dado;
+    }
+
+    static void imprimeDados(Fila f) {
+        System.out.println("\n[");
+        for (int cont = 0; cont < TAMANHO; cont++) {
+            System.out.println(f.dados[cont]);
+        }
+        System.out.println("]");
     }
 }
